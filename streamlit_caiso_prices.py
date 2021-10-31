@@ -96,7 +96,7 @@ mindate = datebone.iloc[0,0].strftime('%m/%d/%Y')
 maxdate = datebone.iloc[-1,0].strftime('%m/%d/%Y')
 # datetime slider
 toggle_datestart = st.sidebar.date_input('start date', mindate)
-toggle_dateend = st.sidebar.date_input(mindate
+toggle_dateend = st.sidebar.date_input('end date',maxdate)
 
 st.subheader('Raw prices')
 st.write(df_lmps)
