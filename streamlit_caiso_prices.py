@@ -89,7 +89,7 @@ toggle_datestart = st.sidebar.date_input('start date', df_lmps['datetime'].dt.da
 toggle_dateend = st.sidebar.date_input('end date',df_lmps['datetime'].dt.date.unique()[-1])
 df_melt['date'] = df_melt['datetime'].dt.date
 
-df_melt = df_melt[(df_melt['date']>=toggle_datestart)&(df_melt['datetime']<=toggle_dateend)]
+df_melt = df_melt[(df_melt['date']>=toggle_datestart)&(df_melt['date']<=toggle_dateend)]
 # df_melt = df_melt[(df_melt['datetime']>=pd.to_datetime(mindate))&(df_melt['datetime']<=pd.to_datetime(mindate))]
 # df_lmps = df_lmps[(df_lmps['datetime']>=pd.to_datetime(mindate))&(df_lmps['datetime']<=pd.to_datetime(maxdate))]
 
