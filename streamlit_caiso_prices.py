@@ -83,11 +83,15 @@ df_melt = pd.melt(df_lmps_1min,id_vars='datetime',value_vars=['RTM','FMM','DAM']
 # datetime slider
 mindate = datebone.iloc[0,0]#.strftime('%Y,%m,%d')
 maxdate = datebone.iloc[-1,0]#.strftime('%Y,%m,%d')
-toggle_datestart = st.sidebar.date_input('start date', datebone.iloc[0,0])
-toggle_dateend = st.sidebar.date_input('end date',datebone.iloc[-1,0])
+# toggle_datestart = st.sidebar.date_input('start date', datebone.iloc[0,0])
+# toggle_dateend = st.sidebar.date_input('end date',datebone.iloc[-1,0])
+toggle_datestart = st.sidebar.date_input('start date', df_lmps['date'].unique()[0])
+toggle_dateend = st.sidebar.date_input('end date',df_lmps['date'].unique()[-1])
+df_melt['date'] = df_melt['datetime'].dt.date
 
-df_melt = df_melt[(df_melt['datetime']>=pd.to_datetime(mindate))&(df_melt['datetime']<=pd.to_datetime(maxdate))]
-df_lmps = df_lmps[(df_lmps['datetime']>=pd.to_datetime(mindate))&(df_lmps['datetime']<=pd.to_datetime(maxdate))]
+df_melt = df_melt[(df_melt['date']>=toggle_datestart)&(df_melt['datetime']<=toggle_dateend]
+# df_melt = df_melt[(df_melt['datetime']>=pd.to_datetime(mindate))&(df_melt['datetime']<=pd.to_datetime(mindate))]
+# df_lmps = df_lmps[(df_lmps['datetime']>=pd.to_datetime(mindate))&(df_lmps['datetime']<=pd.to_datetime(maxdate))]
 
 # chart
 st.subheader('Otay Mesa timeseries')
