@@ -4,6 +4,8 @@ Created on Sat Oct 30 16:38:03 2021
 
 @author: Brian
 """
+
+# %% imports
 import streamlit as st
 import requests
 import pandas as pd
@@ -14,6 +16,7 @@ import time
 import datetime as dt
 @st.cache
 
+# %% functions
 def get_caiso_csv(url, sleepy=5):
     r = requests.get(url)
     z = zipfile.ZipFile(io.BytesIO(r.content),'r')
@@ -42,6 +45,7 @@ def caiso_dam(date_start = '20211028',date_end = '20211101', node = 'OTMESA_2_PL
     df_dam = df_dam[['datetime','MW']].rename(columns = {'MW':'Price (DAM)'})
     return df_dam
 
+# %% getting
 # generate relevant datetime window
 date_start = (dt.date.today()-dt.timedelta(days =2)).strftime("%Y%m%d")
 date_end = (dt.date.today()+dt.timedelta(days =2)).strftime("%Y%m%d")
@@ -74,6 +78,7 @@ df_lmps_1min.set_index('datetime',inplace=True)
 df_lmps_1min = df_lmps_1min.resample('1min').pad().reset_index()
 df_melt = pd.melt(df_lmps_1min,id_vars='datetime',value_vars=['RTM','FMM','DAM'],value_name = '$/MWh',var_name = 'LMPs')
 
+# %% streamlitting
 # chart
 st.subheader('Otay Mesa timeseries')
 fig = px.line(df_melt,x='datetime',y='$/MWh',color='LMPs')
@@ -87,7 +92,5 @@ fig.update_layout(
 st.plotly_chart(fig)
 
 
-# fig.show()
-# st.title("CAISO power prices")
 st.subheader('Raw prices')
 st.write(df_lmps)
