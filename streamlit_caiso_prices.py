@@ -14,7 +14,7 @@ import zipfile
 import io
 import time
 import datetime as dt
-
+@st.cache
 # %% functions
 def get_caiso_csv(url, sleepy=5):
     r = requests.get(url)
@@ -36,7 +36,6 @@ def caiso_fmm(date_start = '20211028',date_end = '20211101', node = 'OTMESA_2_PL
     df_fmm = df_fmm[df_fmm['LMP_TYPE'].isin(['LMP'])]
     df_fmm = df_fmm[['datetime','PRC']].rename(columns = {'PRC':'Price (FMM)'})
     return df_fmm
-@st.cache
 def caiso_dam(date_start = '20211028',date_end = '20211101', node = 'OTMESA_2_PL1X3-APND'):
     url = f'http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_LMP&startdatetime={date_start}T08:00-0000&enddatetime={date_end}T08:00-0000&version=1&market_run_id=DAM&node={node}&resultformat=6'
     df_dam = get_caiso_csv(url)
