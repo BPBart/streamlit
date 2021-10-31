@@ -16,7 +16,6 @@ import time
 import datetime as dt
 
 # %% functions
-@st.cache
 def get_caiso_csv(url, sleepy=5):
     r = requests.get(url)
     z = zipfile.ZipFile(io.BytesIO(r.content),'r')
@@ -25,7 +24,6 @@ def get_caiso_csv(url, sleepy=5):
     z = z.sort_values(by = 'datetime')
     time.sleep(sleepy)
     return(z)
-
 def caiso_realtime(date_start = '20211028',date_end = '20211101', node = 'OTMESA_2_PL1X3-APND'):
     url = f'http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_INTVL_LMP&startdatetime={date_start}T08:00-0000&enddatetime={date_end}T08:00-0000&version=1&market_run_id=RTM&node={node}&resultformat=6'
     df_rtm = get_caiso_csv(url)
@@ -38,6 +36,7 @@ def caiso_fmm(date_start = '20211028',date_end = '20211101', node = 'OTMESA_2_PL
     df_fmm = df_fmm[df_fmm['LMP_TYPE'].isin(['LMP'])]
     df_fmm = df_fmm[['datetime','PRC']].rename(columns = {'PRC':'Price (FMM)'})
     return df_fmm
+@st.cache
 def caiso_dam(date_start = '20211028',date_end = '20211101', node = 'OTMESA_2_PL1X3-APND'):
     url = f'http://oasis.caiso.com/oasisapi/SingleZip?queryname=PRC_LMP&startdatetime={date_start}T08:00-0000&enddatetime={date_end}T08:00-0000&version=1&market_run_id=DAM&node={node}&resultformat=6'
     df_dam = get_caiso_csv(url)
@@ -90,8 +89,7 @@ toggle_dateend = st.sidebar.date_input('end date',df_lmps['datetime'].dt.date.un
 df_melt['date'] = df_melt['datetime'].dt.date
 
 df_melt = df_melt[(df_melt['date']>=toggle_datestart)&(df_melt['date']<=toggle_dateend)]
-# df_melt = df_melt[(df_melt['datetime']>=pd.to_datetime(mindate))&(df_melt['datetime']<=pd.to_datetime(mindate))]
-# df_lmps = df_lmps[(df_lmps['datetime']>=pd.to_datetime(mindate))&(df_lmps['datetime']<=pd.to_datetime(maxdate))]
+df_lmps = df_lmps[(df_lmps['datetime'].dt.date>=toggle_datestart)&(df_lmps['datetime'].dt.date<=toggle_dateend)]
 
 # chart
 st.subheader('Otay Mesa timeseries')
