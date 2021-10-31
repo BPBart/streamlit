@@ -81,6 +81,7 @@ df_melt = pd.melt(df_lmps_1min,id_vars='datetime',value_vars=['RTM','FMM','DAM']
 
 # %% streamlitting
 # chart
+@st.cache
 st.subheader('Otay Mesa timeseries')
 fig = px.line(df_melt,x='datetime',y='$/MWh',color='LMPs')
 fig.update_layout(
