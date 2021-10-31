@@ -45,6 +45,7 @@ def caiso_dam(date_start = '20211028',date_end = '20211101', node = 'OTMESA_2_PL
     df_dam = df_dam[['datetime','MW']].rename(columns = {'MW':'Price (DAM)'})
     return df_dam
 
+
 # %% getting
 # generate relevant datetime window
 date_start = (dt.date.today()-dt.timedelta(days =2)).strftime("%Y%m%d")
@@ -91,6 +92,11 @@ fig.update_layout(
     )
 st.plotly_chart(fig)
 
+mindate = datebone.iloc[0,0].strftime('%m/%d/%Y')
+maxdate = datebone.iloc[-1,0].strftime('%m/%d/%Y')
+# datetime slider
+toggle_datestart = st.sidebar.date_input('start date', mindate)
+toggle_dateend = st.sidebar.date_input(mindate
 
 st.subheader('Raw prices')
 st.write(df_lmps)
