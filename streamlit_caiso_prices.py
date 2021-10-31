@@ -85,8 +85,8 @@ mindate = datebone.iloc[0,0]#.strftime('%Y,%m,%d')
 maxdate = datebone.iloc[-1,0]#.strftime('%Y,%m,%d')
 # toggle_datestart = st.sidebar.date_input('start date', datebone.iloc[0,0])
 # toggle_dateend = st.sidebar.date_input('end date',datebone.iloc[-1,0])
-toggle_datestart = st.sidebar.date_input('start date', df_lmps['date'].unique()[0])
-toggle_dateend = st.sidebar.date_input('end date',df_lmps['date'].unique()[-1])
+toggle_datestart = st.sidebar.date_input('start date', df_lmps['datetime'].dt.date.unique()[0])
+toggle_dateend = st.sidebar.date_input('end date',df_lmps['datetime'].dt.date.unique()[-1])
 df_melt['date'] = df_melt['datetime'].dt.date
 
 df_melt = df_melt[(df_melt['date']>=toggle_datestart)&(df_melt['datetime']<=toggle_dateend)]
