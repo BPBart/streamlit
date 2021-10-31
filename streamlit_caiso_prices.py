@@ -14,7 +14,7 @@ import zipfile
 import io
 import time
 import datetime as dt
-
+@st.cache
 # %% functions
 # @st.cache
 def get_caiso_csv(url, sleepy=5):
