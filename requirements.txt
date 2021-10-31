@@ -1,1 +1,7 @@
 plotly
+pandas
+requests
+zipfile
+io
+tie
+datetime
