@@ -92,11 +92,11 @@ fig.update_layout(
     )
 st.plotly_chart(fig)
 
-mindate = datebone.iloc[0,0].strftime('%m/%d/%Y')
-maxdate = datebone.iloc[-1,0].strftime('%m/%d/%Y')
+mindate = datebone.iloc[0,0].strftime('%Y,%m,%d')
+maxdate = datebone.iloc[-1,0].strftime('%Y,%m,%d')
 # datetime slider
-toggle_datestart = st.sidebar.date_input('start date', mindate)
-toggle_dateend = st.sidebar.date_input('end date',maxdate)
+toggle_datestart = st.sidebar.date_input('start date', datebone.iloc[0,0])
+toggle_dateend = st.sidebar.date_input('end date',datebone.iloc[-1,0])
 
 st.subheader('Raw prices')
 st.write(df_lmps)
