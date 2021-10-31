@@ -69,6 +69,7 @@ df_lmps = pd.merge(df_lmps,df_fmm,'left','datetime')
 df_lmps = pd.merge(df_lmps,df_rtm,'left','datetime')
 df_lmps.columns = ['datetime','DAM','FMM','RTM']
 
+df_lmps_1min = df_lmps.copy(deep = True)
 df_lmps_1min.set_index('datetime',inplace=True)
 df_lmps_1min = df_lmps_1min.resample('1min').pad().reset_index()
 df_melt = pd.melt(df_lmps_1min,id_vars='datetime',value_vars=['RTM','FMM','DAM'],value_name = '$/MWh',var_name = 'LMPs')
