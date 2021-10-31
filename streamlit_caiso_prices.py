@@ -7,6 +7,7 @@ Created on Sat Oct 30 16:38:03 2021
 import streamlit as st
 import requests
 import pandas as pd
+!pip install plotly
 import plotly.express as px
 import zipfile
 import io
