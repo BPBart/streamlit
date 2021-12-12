@@ -47,26 +47,30 @@ def caiso_dam(date_start = '20211028',date_end = '20211101', node = 'OTMESA_2_PL
 
 # %% getting
 # generate relevant datetime window
-date_start = (dt.date.today()-dt.timedelta(days =2)).strftime("%Y%m%d")
-date_end = (dt.date.today()+dt.timedelta(days =2)).strftime("%Y%m%d")
+# toggle_datestart = st.sidebar.date_input('start date', df_lmps['datetime'].dt.date.unique()[0])
+# toggle_dateend = st.sidebar.date_input('end date',df_lmps['datetime'].dt.date.unique()[-1])
+toggle_datestart = st.sidebar.date_input('start date', (dt.date.today()-dt.timedelta(days = 2)).strftime("%Y%m%d"))
+toggle_dateend = st.sidebar.date_input('end date',(dt.date.today()+dt.timedelta(days =2)).strftime("%Y%m%d"))
+# date_start = (dt.date.today()-dt.timedelta(days =2)).strftime("%Y%m%d")
+# date_end = (dt.date.today()+dt.timedelta(days =2)).strftime("%Y%m%d")
 
 data_load_state = st.text('Loading data...')
 st.title('''CAISO Power Prices''')
 # dam
-df_dam = caiso_dam(date_start,date_end)
+df_dam = caiso_dam(toggle_datestart,toggle_dateend)
 # df_dam.set_index('datetime',inplace=True)
 # df_dam = df_dam.resample('5min').pad().reset_index()
 # fmm
-df_fmm = caiso_fmm(date_start,date_end)
+df_fmm = caiso_fmm(toggle_datestart,toggle_dateend)
 # df_fmm.set_index('datetime',inplace=True)
 # df_fmm = df_fmm.resample('5min').pad().reset_index()
 #rtm
-df_rtm = caiso_realtime(date_start,date_end)
+df_rtm = caiso_realtime(toggle_datestart,toggle_dateend)
 
 data_load_state.text('Loading data...done!')
 #merge
 date_start = (dt.date.today()-dt.timedelta(days =1)).strftime("%Y%m%d")
-datebone = pd.DataFrame({'datetime':pd.date_range(date_start,date_end,freq='5min',tz='US/Pacific')})
+datebone = pd.DataFrame({'datetime':pd.date_range(toggle_datestart,toggle_dateend,freq='5min',tz='US/Pacific')})
 
 df_lmps = pd.merge(datebone,df_dam,'left','datetime')
 df_lmps = pd.merge(df_lmps,df_fmm,'left','datetime')
@@ -83,12 +87,10 @@ df_melt = pd.melt(df_lmps_1min,id_vars='datetime',value_vars=['RTM','FMM','DAM']
 
 # %% streamlitting
 # datetime slider
-mindate = datebone.iloc[0,0]#.strftime('%Y,%m,%d')
-maxdate = datebone.iloc[-1,0]#.strftime('%Y,%m,%d')
+# mindate = datebone.iloc[0,0]#.strftime('%Y,%m,%d')
+# maxdate = datebone.iloc[-1,0]#.strftime('%Y,%m,%d')
 # toggle_datestart = st.sidebar.date_input('start date', datebone.iloc[0,0])
 # toggle_dateend = st.sidebar.date_input('end date',datebone.iloc[-1,0])
-toggle_datestart = st.sidebar.date_input('start date', df_lmps['datetime'].dt.date.unique()[0])
-toggle_dateend = st.sidebar.date_input('end date',df_lmps['datetime'].dt.date.unique()[-1])
 df_melt['date'] = df_melt['datetime'].dt.date
 
 df_melt = df_melt[(df_melt['date']>=toggle_datestart)&(df_melt['date']<=toggle_dateend)]
