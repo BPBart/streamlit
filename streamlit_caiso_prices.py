@@ -54,12 +54,12 @@ data_load_state = st.text('Loading data...')
 st.title('''CAISO Power Prices''')
 # dam
 df_dam = caiso_dam(date_start,date_end)
-df_dam.set_index('datetime',inplace=True)
-df_dam = df_dam.resample('5min').pad().reset_index()
+# df_dam.set_index('datetime',inplace=True)
+# df_dam = df_dam.resample('5min').pad().reset_index()
 # fmm
 df_fmm = caiso_fmm(date_start,date_end)
-df_fmm.set_index('datetime',inplace=True)
-df_fmm = df_fmm.resample('5min').pad().reset_index()
+# df_fmm.set_index('datetime',inplace=True)
+# df_fmm = df_fmm.resample('5min').pad().reset_index()
 #rtm
 df_rtm = caiso_realtime(date_start,date_end)
 
@@ -72,6 +72,9 @@ df_lmps = pd.merge(datebone,df_dam,'left','datetime')
 df_lmps = pd.merge(df_lmps,df_fmm,'left','datetime')
 df_lmps = pd.merge(df_lmps,df_rtm,'left','datetime')
 df_lmps.columns = ['datetime','DAM','FMM','RTM']
+df_lmps['DAM'] = df_lmps['DAM'].fillna(method = 'ffill',limit=11)
+df_lmps['FMM'] = df_lmps['FMM'].fillna(method = 'ffill',limit=2)
+
 
 df_lmps_1min = df_lmps.copy(deep = True)
 df_lmps_1min.set_index('datetime',inplace=True)
